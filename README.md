@@ -1,5 +1,5 @@
 # RatKing
-CONCEPT: Universal Layout/Widget UI Generator
+CONCEPT: Universal Website Layout/Widget UI Generator
 
 WIDGETS INCLUDED:
 - Chatroom (irc)
