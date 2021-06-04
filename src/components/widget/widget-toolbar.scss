@@ -1,0 +1,15 @@
+.widget-toolbar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.5rem;
+  width: 100%;
+  pointer-events: auto;
+}
+
+.widget-toolbar-title {
+  position: absolute;
+  margin: auto;
+}

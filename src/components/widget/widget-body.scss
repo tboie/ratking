@@ -1,0 +1,10 @@
+.widget-body {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  overflow: hidden;
+  user-select: all;
+  z-index: 3;
+}

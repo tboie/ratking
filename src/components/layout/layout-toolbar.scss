@@ -1,0 +1,33 @@
+/* Keeping separate from theme */
+
+#layout-toolbar {
+  position: fixed;
+  z-index: 1;
+  background: black;
+  bottom: 0;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+#layout-toolbar span {
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0 0.25rem;
+  margin: 0 0.25rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
+  cursor: default;
+}
+
+#layout-toolbar .active {
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+#layout-toolbar button {
+  margin: 0 0.25rem;
+  background: rgba(255, 255, 255, 0.5);
+}

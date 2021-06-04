@@ -1,0 +1,151 @@
+/***
+ Theme Variables
+***/
+
+// Font Import
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap");
+
+// Colors
+$color-1: rgba(0, 0, 0, 1);
+$color-2: rgba(20, 20, 20, 1);
+$color-3: rgba(10, 10, 10, 0.85);
+$color-4: rgba(100, 100, 100, 0.5);
+$color-5: rgba(120, 120, 120, 1);
+$color-6: rgba(255, 255, 255, 0.25);
+$color-7: rgba(255, 255, 255, 0.1);
+$color-8: rgba(255, 255, 255, 1);
+
+// App
+$app-bg: $color-5;
+$app-padding: 0;
+$app-font-color: $color-8;
+$app-font-size: 16px;
+$app-font-family: "Source Code Pro", sans-serif;
+
+// Widget
+$widget-bg: $color-3;
+$widget-box-shadow: 2px 2px 2px 1px $color-4;
+
+$widget-border-width: 1px;
+$widget-border-color: $color-4;
+$widget-border-radius: 0.25rem;
+$widget-border-style: solid;
+
+$widget-toolbar-bg: $color-2;
+$widget-toolbar-font-size: 1rem;
+$widget-toolbar-font-color: $color-5;
+
+$widget-placeholder-bg: $color-4;
+$widget-placeholder-border-width: 1px;
+$widget-placeholder-border-style: solid;
+$widget-placeholder-border-color: $color-6;
+
+$widget-resize-handle: 2px solid $color-6;
+
+$widget-body-margin: 0.5rem;
+
+/***
+ Components
+***/
+
+// App
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+
+  margin: 0;
+  padding: $app-padding;
+
+  background-color: $app-bg;
+  background-image: linear-gradient(315deg, $app-bg 0%, $color-2 90%);
+
+  color: $app-font-color;
+  font-size: $app-font-size;
+  font-family: $app-font-family;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Preloader
+.loader {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Widget
+.react-grid-item {
+  margin: 0;
+
+  background: $widget-bg;
+  box-shadow: $widget-box-shadow;
+
+  font-family: $app-font-family;
+  font-size: $app-font-size;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  border-width: $widget-border-width;
+  border-style: $widget-border-style;
+  border-color: $widget-border-color;
+  border-radius: $widget-border-radius;
+}
+
+// Widget Drag PlaceHolder
+.react-grid-item.react-grid-placeholder {
+  background: $widget-placeholder-bg;
+  border-width: $widget-placeholder-border-width;
+  border-style: $widget-placeholder-border-style;
+  border-color: $widget-placeholder-border-color;
+}
+
+// Widget Body
+.widget-body {
+  margin: $widget-body-margin;
+}
+
+// Widget Toolbar
+.widget-toolbar {
+  background: $widget-toolbar-bg;
+
+  border: 0;
+  border-top-left-radius: $widget-border-radius;
+  border-top-right-radius: $widget-border-radius;
+
+  border-style: $widget-border-style;
+
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  border-bottom-width: $widget-border-width;
+  border-bottom-style: $widget-border-style;
+  border-bottom-color: $widget-border-color;
+
+  font-size: $widget-toolbar-font-size;
+}
+
+// Widget Toolbar Title
+.widget-toolbar-title {
+  background: $widget-toolbar-bg;
+  border-radius: 50%;
+  padding: 0 0.75rem 1px;
+
+  color: $widget-toolbar-font-color;
+  font-size: $widget-toolbar-font-size;
+}
+
+// Widget Resize Handle
+.react-resizable-handle::after {
+  border-right: $widget-resize-handle !important;
+  border-bottom: $widget-resize-handle !important;
+}

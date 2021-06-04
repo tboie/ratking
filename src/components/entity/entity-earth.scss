@@ -1,0 +1,9 @@
+.cesium-viewer {
+  position: fixed;
+  background-color: transparent;
+}
+
+.cesium-viewer > div:not(:first-child),
+.cesium-credit-lightbox-overlay {
+  display: none;
+}
