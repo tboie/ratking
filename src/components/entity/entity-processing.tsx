@@ -1,27 +1,27 @@
 import "./entity-processing.scss";
 
+// React
+import { useEffect, useRef, useState } from "react";
+
+// Resize Observer
+import useResizeObserver from "use-resize-observer";
+
+// Processing
 import Sketch from "react-p5";
 import p5Types from "p5"; //Import this for typechecking and intellisense
-import { useEffect } from "react";
 
 const ProcessingWidget = () => {
-  let canvasRef;
+  const [processing, setProcessing] = useState<p5Types>();
+  const { ref, width = 1, height = 1 } = useResizeObserver<HTMLDivElement>();
+
   let x = 50;
   const y = 50;
 
-  //See annotations in JS for more information
   const setup = (p5: p5Types, canvasParentRef: Element) => {
-    /*
-    console.log(
-      "width: " +
-        canvasParentRef.clientWidth +
-        " height: " +
-        canvasParentRef.clientHeight
-    );
-    */
-
-    // TODO: fix canvas size (p5.resizeCanvas) ?
-    p5.createCanvas(100, 100).parent(canvasParentRef);
+    if (!processing) {
+      setProcessing(p5);
+      p5.createCanvas(100, 100).parent(canvasParentRef);
+    }
   };
 
   const draw = (p5: p5Types) => {
@@ -30,14 +30,29 @@ const ProcessingWidget = () => {
     x++;
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    resize();
+  }, [processing]);
+
+  useEffect(() => {
+    resize();
+  }, [width, height]);
+
+  const resize = () => {
+    if (processing && ref) {
+      processing.resizeCanvas(width, height);
+    }
+  };
 
   return (
-    <Sketch
-      setup={setup}
-      draw={draw}
-      style={{ width: "100%", height: "100%" }}
-    />
+    <div className="entity-processing" ref={ref}>
+      <Sketch
+        setup={setup}
+        draw={draw}
+        windowResized={resize}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </div>
   );
 };
 
