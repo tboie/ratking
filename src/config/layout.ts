@@ -12,35 +12,19 @@ export const widgetConfig = {
 // Desktop Layout
 export const layoutDesktop: GridLayout.Layout[] = [
   {
-    i: "test",
+    i: "nav",
     x: 0,
     y: 0,
     w: 16,
-    h: 16,
+    h: 32,
     ...widgetConfig,
   },
   {
-    i: "test",
+    i: "content",
     x: 16,
     y: 0,
     w: 16,
-    h: 16,
-    ...widgetConfig,
-  },
-  {
-    i: "processing",
-    x: 0,
-    y: 16,
-    w: 16,
-    h: 16,
-    ...widgetConfig,
-  },
-  {
-    i: "chatroom",
-    x: 16,
-    y: 16,
-    w: 16,
-    h: 16,
+    h: 32,
     ...widgetConfig,
   },
 ].map((p, idx) => {

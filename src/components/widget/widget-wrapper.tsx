@@ -21,6 +21,8 @@ const AudioWaveform = React.lazy(
 const RatKing = React.lazy(() => import("../entity/entity-ratking"));
 const ChatRoom = React.lazy(() => import("../entity/entity-chatroom"));
 const Processing = React.lazy(() => import("../entity/entity-processing"));
+const Nav = React.lazy(() => import("../entity/entity-nav"));
+const Content = React.lazy(() => import("../entity/entity-content"));
 
 export type WidgetType =
   | "test"
@@ -30,7 +32,9 @@ export type WidgetType =
   | "audio-editor"
   | "ratking"
   | "chatroom"
-  | "processing";
+  | "processing"
+  | "nav"
+  | "content";
 
 export type WidgetWrapperProps = {
   type: WidgetType;
@@ -53,6 +57,8 @@ const Widget = ({ type, showToolbar }: WidgetWrapperProps) => {
           {type === "ratking" && <RatKing />}
           {type === "chatroom" && <ChatRoom />}
           {type === "processing" && <Processing />}
+          {type === "nav" && <Nav />}
+          {type === "content" && <Content />}
         </Suspense>
       </WidgetBody>
     </>
