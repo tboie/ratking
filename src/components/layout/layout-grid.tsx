@@ -99,17 +99,19 @@ const LayoutGrid = () => {
           {widgets}
         </ResponsiveGrid>
       )}
-      <LayoutToolbar
-        currBreakpoint={breakpoint}
-        breakpoints={layoutConfig.breakpoints}
-        height={layoutConfig.toolbar.height}
-        showWidgetResize={showWidgetResize}
-        toggleShowWidgetResize={() => setShowWidgetResize(!showWidgetResize)}
-        showWidgetToolbars={showWidgetToolbars}
-        toggleShowWidgetToolbars={() =>
-          setShowWidgetToolbars(!showWidgetToolbars)
-        }
-      />
+      {edit && (
+        <LayoutToolbar
+          currBreakpoint={breakpoint}
+          breakpoints={layoutConfig.breakpoints}
+          height={layoutConfig.toolbar.height}
+          showWidgetResize={showWidgetResize}
+          toggleShowWidgetResize={() => setShowWidgetResize(!showWidgetResize)}
+          showWidgetToolbars={showWidgetToolbars}
+          toggleShowWidgetToolbars={() =>
+            setShowWidgetToolbars(!showWidgetToolbars)
+          }
+        />
+      )}
     </>
   );
 };
