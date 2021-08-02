@@ -1,3 +1,4 @@
+// SCSS
 import "./layout-grid.scss";
 
 // React
@@ -12,9 +13,18 @@ import LayoutToolbar from "./layout-toolbar";
 // Layout Config
 import { layoutConfig, widgetConfig } from "../../config/layout";
 
-const LayoutGrid = () => {
+// Typescript DataProps type
+import { DataProps } from "../../../src/app/resiumig/app-resiumig";
+
+type LayoutGridProps = {} & DataProps;
+
+const LayoutGrid = ({
+  data,
+  selectedData,
+  setSelectedData,
+}: LayoutGridProps) => {
   const [width, height] = useWindowSize();
-  const [edit, setEdit] = useState(true);
+  const [edit, setEdit] = useState(false);
   const [showWidgetToolbars, setShowWidgetToolbars] = useState(edit);
   const [showWidgetResize, setShowWidgetResize] = useState(edit);
   const [breakpoint, setBreakpoint] = useState(() => getCurrentBreakpoint());
@@ -50,10 +60,13 @@ const LayoutGrid = () => {
           key={idx}
           type={obj.i.split("-")[0] as WidgetType}
           showToolbar={showWidgetToolbars}
+          data={data}
+          selectedData={selectedData}
+          setSelectedData={(val) => setSelectedData(val)}
         />
       </div>
     ));
-  }, [breakpoint, showWidgetToolbars]);
+  }, [breakpoint, showWidgetToolbars, data, selectedData]);
 
   // Reset layout on breakpoint change
   // Widget positioning gets buggy when number of widgets varies

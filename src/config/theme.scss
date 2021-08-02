@@ -149,3 +149,20 @@ body {
   border-right: $widget-resize-handle !important;
   border-bottom: $widget-resize-handle !important;
 }
+
+// Scrollbars
+::-webkit-scrollbar {
+  width: 0.75rem;
+}
+
+::-webkit-scrollbar-track {
+  background: $color-7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $color-5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $color-6;
+}

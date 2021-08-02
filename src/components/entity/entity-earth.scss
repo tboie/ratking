@@ -1,9 +1,18 @@
 .cesium-viewer {
   position: fixed;
   background-color: transparent;
+  margin-left: 15.8%;
+  top: -8%;
 }
 
 .cesium-viewer > div:not(:first-child),
 .cesium-credit-lightbox-overlay {
   display: none;
+}
+
+@media only screen and (max-width: 769px) {
+  .cesium-viewer {
+    top: -14%;
+    margin-left: 0;
+  }
 }

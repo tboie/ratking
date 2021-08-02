@@ -1,15 +1,31 @@
+// CSS
 import "./config/theme.scss";
 
-// Router
-import { BrowserRouter as Router } from "react-router-dom";
+// React
+import React, { Suspense } from "react";
 
-// Layout
-import Layout from "./components/layout/layout-grid";
+// React Router
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+// Suspense Loader
+import Loader from "react-spinners/RiseLoader";
+
+// ResiumIG Prototype
+const ResiumIG = React.lazy(() => import("./app/resiumig/app-resiumig"));
 
 function App() {
   return (
     <Router>
-      <Layout />
+      <Switch>
+        <Route exact path="/">
+          <div>LABRAT.ART</div>
+        </Route>
+        <Route path="/resiumig/:user">
+          <Suspense fallback={<Loader />}>
+            <ResiumIG />
+          </Suspense>
+        </Route>
+      </Switch>
     </Router>
   );
 }

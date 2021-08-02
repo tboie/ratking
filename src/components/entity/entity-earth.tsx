@@ -1,5 +1,3 @@
-import "./entity-earth.scss";
-
 /* START README
 
 1) Create a craco.config.js in root
@@ -24,52 +22,48 @@ module.exports = {
 
 END README */
 
+// CSS
+import "./entity-earth.scss";
+
+// React
+import { RefObject } from "react";
+
+// Typescript DataProps type
+import { DataProps } from "../../app/resiumig/app-resiumig";
+
 import {
   Viewer,
   Scene,
   Entity,
   ImageryLayer,
-  CameraFlyTo,
   CesiumComponentRef,
+  PolylineGraphics,
 } from "resium";
 
 import {
+  PolylineDashMaterialProperty,
   Color,
   Cartesian3,
-  EasingFunction,
-  IonImageryProvider,
+  createWorldImagery,
+  IonWorldImageryStyle,
+  Ion,
   Viewer as CesiumViewer,
 } from "cesium";
 
-import { useRef } from "react";
+// Cesium API Key
+Ion.defaultAccessToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIyOGQ2ODQ0NS0wMDI3LTRjZjYtODkwMi03OTFhZDdkZTI0MTMiLCJpZCI6NTE2ODMsImlhdCI6MTYxODI1OTI4Mn0.D8EmfzgisLREfPbsHUIR4fki2k8Wa_PZQNG7xA22LHg";
 
-import Volcanos from "../../../public/data/volcano_db.json";
+type EarthProps = {
+  forwardedRef: RefObject<CesiumComponentRef<CesiumViewer>> | null;
+} & DataProps;
 
-const Earth = () => {
-  const ref = useRef<CesiumComponentRef<CesiumViewer>>(null);
-
-  const cameraFly = () => {
-    if (ref.current?.cesiumElement) {
-      const volcano = Volcanos[Math.floor(Math.random() * Volcanos.length)];
-
-      ref.current?.cesiumElement.camera.flyTo({
-        destination: Cartesian3.fromDegrees(
-          volcano.Longitude,
-          volcano.Latitude,
-          100
-        ),
-        duration: 10,
-        complete: cameraFly,
-        maximumHeight: 99999000,
-        easingFunction: EasingFunction.QUARTIC_IN_OUT,
-      });
-    }
-  };
-
+const Earth = ({ data, forwardedRef, setSelectedData }: EarthProps) => {
   return (
     <Viewer
       full
-      ref={ref}
+      ref={forwardedRef}
+      // Options for full screen and transparent BG
       skyBox={false}
       infoBox={false}
       fullscreenButton={false}
@@ -78,27 +72,60 @@ const Earth = () => {
     >
       <Scene backgroundColor={Color.TRANSPARENT} />
 
+      {/* globe skin */}
       <ImageryLayer
-        imageryProvider={new IonImageryProvider({ assetId: 3812 })}
-        alpha={0.5}
-        brightness={2.0}
+        imageryProvider={createWorldImagery({
+          style: IonWorldImageryStyle.AERIAL_WITH_LABELS,
+        })}
       />
 
-      <CameraFlyTo
-        destination={Cartesian3.fromDegrees(139.767052, 35.681167, 100)}
-        duration={10}
-        onComplete={() => {
-          cameraFly();
-        }}
-      />
-
-      {Volcanos.map((p, idx) => (
-        <Entity
-          key={idx}
-          point={{ pixelSize: 10 }}
-          position={Cartesian3.fromDegrees(p.Longitude, p.Latitude, 100)}
-        />
-      ))}
+      {
+        // TODO: deal with objects missing lng and lat.
+        // IDEA: use "directory" property "country, city" vals in instagram place json
+        //       in combo with google geocode service to fill missing coordinates in data
+        data.length &&
+          data
+            .filter((l) => l.lng && l.lat)
+            .map((loc, idx: number) => (
+              <Entity
+                key={idx}
+                point={{ pixelSize: 16, color: Color.CYAN }}
+                position={Cartesian3.fromDegrees(loc.lng, loc.lat, 100)}
+                onClick={(moment, entity) => {
+                  setSelectedData(loc);
+                }}
+                onMouseEnter={() => (document.body.style.cursor = "pointer")}
+                onMouseLeave={() => (document.body.style.cursor = "auto")}
+              >
+                {/*
+                <LabelGraphics
+                  text={loc.name}
+                  font="20px Arial"
+                  fillColor={Color.CYAN}
+                  outlineColor={Color.BLACK}
+                  outlineWidth={1}
+                  style={LabelStyle.FILL_AND_OUTLINE}
+                  pixelOffset={Cartesian2.fromArray([0, 0])}
+              />*/}
+                {idx > 0 && data[idx - 1]?.lng && data[idx - 1].lat ? (
+                  <PolylineGraphics
+                    width={4}
+                    positions={[
+                      Cartesian3.fromDegrees(loc.lng, loc.lat, 100),
+                      Cartesian3.fromDegrees(
+                        data[idx - 1].lng,
+                        data[idx - 1].lat,
+                        100
+                      ),
+                    ]}
+                    material={
+                      new PolylineDashMaterialProperty({ color: Color.CYAN })
+                    }
+                  />
+                ) : null}
+              </Entity>
+            ))
+      }
     </Viewer>
   );
 };
