@@ -4,7 +4,7 @@ import "./widget-wrapper.scss";
 import React, { Suspense } from "react";
 
 // Typescript DataProps type
-import { DataProps } from "../../app/resiumig/app-resiumig";
+import { DataProps } from "../layout/layout-grid";
 
 // Widget Base Components
 import WidgetToolbar from "./widget-toolbar";

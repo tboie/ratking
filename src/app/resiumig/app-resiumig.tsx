@@ -1,3 +1,6 @@
+// Theme
+import "./config-theme.scss";
+
 // SCSS
 import "./app-resiumig.scss";
 
@@ -17,6 +20,9 @@ import { CesiumComponentRef } from "resium";
 import Cartesian3 from "cesium/Source/Core/Cartesian3";
 import { useParams } from "react-router-dom";
 
+// Layout & Widget Config
+import { layoutConfig, widgetConfig } from "./config-layout";
+
 // Data Model Obj Type
 export type Location = {
   idx: number;
@@ -28,13 +34,6 @@ export type Location = {
   photo: string;
   numPhotos: number;
   caption: string;
-};
-
-// Component Data Props Type
-export type DataProps = {
-  data: Location[]; // User data array
-  selectedData?: Location; // Selected obj from user data
-  setSelectedData: (val: Location) => void; // Earth HTML element (child ref)
 };
 
 // First Mount Flag
@@ -111,7 +110,12 @@ const ResiumIG = () => {
       {data && selectedData && (
         <>
           {EarthComponent}
-          <Layout {...p} />
+          <Layout
+            {...p}
+            showToolbar={true}
+            layoutConfig={layoutConfig}
+            widgetConfig={widgetConfig}
+          />
         </>
       )}
     </>

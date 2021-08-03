@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 // Typescript DataProps type
-import { DataProps } from "../../app/resiumig/app-resiumig";
+import { DataProps } from "../layout/layout-grid";
 
 type MediaControlsProps = {} & DataProps;
 

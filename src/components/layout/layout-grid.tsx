@@ -10,23 +10,31 @@ import { Responsive as ResponsiveGrid, Layout } from "react-grid-layout";
 import Widget, { WidgetType } from "../widget/widget-wrapper";
 import LayoutToolbar from "./layout-toolbar";
 
-// Layout Config
-import { layoutConfig, widgetConfig } from "../../config/layout";
+// Component Data Props Type
+export type DataProps = {
+  data?: any; // Core data object
+  selectedData?: any; // Selected obj from user data
+  setSelectedData?: (val: any) => void; // Earth HTML element (child ref)
+};
 
-// Typescript DataProps type
-import { DataProps } from "../../../src/app/resiumig/app-resiumig";
-
-type LayoutGridProps = {} & DataProps;
+// Layout Grid Props Type
+type LayoutGridProps = {
+  showToolbar: boolean;
+  layoutConfig: any;
+  widgetConfig: any;
+} & DataProps;
 
 const LayoutGrid = ({
+  showToolbar,
   data,
   selectedData,
   setSelectedData,
+  layoutConfig,
+  widgetConfig,
 }: LayoutGridProps) => {
   const [width, height] = useWindowSize();
-  const [edit, setEdit] = useState(false);
-  const [showWidgetToolbars, setShowWidgetToolbars] = useState(edit);
-  const [showWidgetResize, setShowWidgetResize] = useState(edit);
+  const [showWidgetToolbars, setShowWidgetToolbars] = useState(showToolbar);
+  const [showWidgetResize, setShowWidgetResize] = useState(showToolbar);
   const [breakpoint, setBreakpoint] = useState(() => getCurrentBreakpoint());
   const [refreshing, setRefreshing] = useState(false);
 
@@ -35,6 +43,7 @@ const LayoutGrid = ({
     let currBreakpoint = "unknown";
 
     Object.entries(layoutConfig.breakpoints).some((val) => {
+      // @ts-ignore
       if (window.innerWidth > val[1]) {
         currBreakpoint = val[0];
         return true;
@@ -62,7 +71,7 @@ const LayoutGrid = ({
           showToolbar={showWidgetToolbars}
           data={data}
           selectedData={selectedData}
-          setSelectedData={(val) => setSelectedData(val)}
+          setSelectedData={(val) => setSelectedData && setSelectedData(val)}
         />
       </div>
     ));
@@ -81,7 +90,9 @@ const LayoutGrid = ({
   }, [showWidgetResize]);
 
   // Layout Height
-  const layoutHeight = edit ? height - layoutConfig.toolbar.height : height;
+  const layoutHeight = showToolbar
+    ? height - layoutConfig.toolbar.height
+    : height;
 
   return (
     <>
@@ -112,7 +123,7 @@ const LayoutGrid = ({
           {widgets}
         </ResponsiveGrid>
       )}
-      {edit && (
+      {showToolbar && (
         <LayoutToolbar
           currBreakpoint={breakpoint}
           breakpoints={layoutConfig.breakpoints}

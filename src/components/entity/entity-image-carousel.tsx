@@ -8,7 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
 // Typescript DataProps type
-import { DataProps } from "../../app/resiumig/app-resiumig";
+import { DataProps } from "../layout/layout-grid";
 
 type ImageCarouselProps = {} & DataProps;
 

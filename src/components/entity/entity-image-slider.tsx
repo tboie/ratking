@@ -11,7 +11,7 @@ import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 
 // Typescript DataProps type
-import { DataProps } from "../../app/resiumig/app-resiumig";
+import { DataProps } from "../layout/layout-grid";
 
 type ImageSliderProps = {} & DataProps;
 
@@ -31,7 +31,7 @@ const ImageSlider = ({
     loop: false,
     centered: true,
     afterChange: (slider) =>
-      setSelectedData(data[slider.details().relativeSlide]),
+      setSelectedData && setSelectedData(data[slider.details().relativeSlide]),
     breakpoints: {
       "(min-width: 0px)": {
         slidesPerView: 5,
@@ -66,7 +66,7 @@ const ImageSlider = ({
           className={`keen-slider__slide ${
             selectedData!.idx === idx ? "selected" : ""
           }`}
-          onClick={() => !cancelClick && setSelectedData(d)}
+          onClick={() => !cancelClick && setSelectedData && setSelectedData(d)}
           onMouseDown={() => (cancelClick = false)}
           onMouseLeave={() => (cancelClick = true)}
         >

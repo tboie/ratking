@@ -29,7 +29,7 @@ import "./entity-earth.scss";
 import { RefObject } from "react";
 
 // Typescript DataProps type
-import { DataProps } from "../../app/resiumig/app-resiumig";
+import { DataProps } from "../layout/layout-grid";
 
 import {
   Viewer,
@@ -91,9 +91,9 @@ const Earth = ({ data, forwardedRef, setSelectedData }: EarthProps) => {
                 key={idx}
                 point={{ pixelSize: 16, color: Color.CYAN }}
                 position={Cartesian3.fromDegrees(loc.lng, loc.lat, 100)}
-                onClick={(moment, entity) => {
-                  setSelectedData(loc);
-                }}
+                onClick={(moment, entity) =>
+                  setSelectedData && setSelectedData(loc)
+                }
                 onMouseEnter={() => (document.body.style.cursor = "pointer")}
                 onMouseLeave={() => (document.body.style.cursor = "auto")}
               >

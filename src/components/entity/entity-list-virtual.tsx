@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Virtuoso } from "react-virtuoso";
 
 // Typescript DataProps type
-import { DataProps } from "../../app/resiumig/app-resiumig";
+import { DataProps } from "../layout/layout-grid";
 
 // React Router
 import { useLocation } from "react-router-dom";
