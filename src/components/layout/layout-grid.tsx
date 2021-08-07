@@ -35,36 +35,41 @@ const LayoutGrid = ({
   const [width, height] = useWindowSize();
   const [showWidgetToolbars, setShowWidgetToolbars] = useState(showToolbar);
   const [showWidgetResize, setShowWidgetResize] = useState(showToolbar);
-  const [breakpoint, setBreakpoint] = useState(() => getCurrentBreakpoint());
+  const [bpW, setbpW] = useState(() => getWindowBreakpoints().width);
+  const [bpH, setbpH] = useState(() => getWindowBreakpoints().height);
   const [refreshing, setRefreshing] = useState(false);
 
   // Get Current Window Width Breakpoint
-  function getCurrentBreakpoint(): string {
-    let currBreakpoint = "unknown";
+  function getWindowBreakpoints(): { width: string; height: string } {
+    let bps = { width: "unknown", height: "unknown" };
 
-    Object.entries(layoutConfig.breakpoints).some((val) => {
-      // @ts-ignore
-      if (window.innerWidth > val[1]) {
-        currBreakpoint = val[0];
-        return true;
-      }
-      return false;
-    });
+    // sort bp's desc and use first bp > value
+    ["width", "height"].forEach((dim) =>
+      Object.entries(
+        layoutConfig.breakpoints[dim] as { [key: string]: number }
+      ).some((ele) =>
+        dim === "width"
+          ? width > ele[1] && (bps.width = ele[0])
+          : height > ele[1] && (bps.height = ele[0])
+      )
+    );
 
-    return currBreakpoint;
+    return bps;
   }
 
   // Save Layout
   function saveLayout(cb: Layout[]) {
+    console.log("before");
+    console.log(layoutConfig.layouts[bpH][bpW]);
     console.log("layout config: ");
     console.log(cb);
-    layoutConfig.layouts[breakpoint] = [...cb];
+    layoutConfig.layouts[bpH][bpW] = [...cb];
   }
 
   // Widget Components
   const widgets = useMemo(() => {
-    return layoutConfig.layouts[breakpoint].map((obj: Layout, idx: number) => (
-      <div key={obj.i} data-grid={obj}>
+    return layoutConfig.layouts[bpH][bpW].map((obj: Layout, idx: number) => (
+      <div id={obj.i} key={obj.i} data-grid={obj}>
         <Widget
           key={idx}
           type={obj.i.split("-")[0] as WidgetType}
@@ -75,7 +80,7 @@ const LayoutGrid = ({
         />
       </div>
     ));
-  }, [breakpoint, showWidgetToolbars, data, selectedData]);
+  }, [bpH, showWidgetToolbars, data, selectedData]);
 
   // Reset layout on breakpoint change
   // Widget positioning gets buggy when number of widgets varies
@@ -88,6 +93,11 @@ const LayoutGrid = ({
   useEffect(() => {
     setRefreshing(true);
   }, [showWidgetResize]);
+
+  useEffect(() => {
+    setRefreshing(true);
+    setbpH(getWindowBreakpoints().height);
+  }, [height]);
 
   // Layout Height
   const layoutHeight = showToolbar
@@ -102,10 +112,10 @@ const LayoutGrid = ({
             minHeight: layoutHeight,
           }}
           width={width}
-          layouts={layoutConfig.layouts}
+          layouts={layoutConfig.layouts[bpH]}
           rowHeight={layoutHeight / widgetConfig.maxH}
           margin={layoutConfig.margin as [number, number]}
-          breakpoints={layoutConfig.breakpoints}
+          breakpoints={layoutConfig.breakpoints.width}
           cols={layoutConfig.cols}
           maxRows={widgetConfig.maxH}
           compactType={layoutConfig.compactType}
@@ -114,7 +124,7 @@ const LayoutGrid = ({
           preventCollision={layoutConfig.preventCollision}
           onBreakpointChange={(bp) => {
             setRefreshing(true);
-            setBreakpoint(bp);
+            setbpW(bp);
           }}
           onResizeStop={saveLayout}
           onDragStop={saveLayout}
@@ -125,8 +135,10 @@ const LayoutGrid = ({
       )}
       {showToolbar && (
         <LayoutToolbar
-          currBreakpoint={breakpoint}
-          breakpoints={layoutConfig.breakpoints}
+          bpW={bpW}
+          bpH={bpH}
+          bpConfigW={layoutConfig.breakpoints.width}
+          bpConfigH={layoutConfig.breakpoints.height}
           height={layoutConfig.toolbar.height}
           showWidgetResize={showWidgetResize}
           toggleShowWidgetResize={() => setShowWidgetResize(!showWidgetResize)}

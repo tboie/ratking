@@ -8,14 +8,13 @@ export const widgetConfig = {
   minH: 2,
   isBounded: true,
   moved: false,
-  static: false,
 };
 
 // Mobile Layout
 export const LayoutMobile: GridLayout.Layout[] = [
   {
     w: 32,
-    h: 32,
+    h: 50,
     x: 0,
     y: 0,
     i: "test",
@@ -34,7 +33,7 @@ export const LayoutDesktop: GridLayout.Layout[] = [
     h: 22,
     x: 26,
     y: 10,
-    i: "chatroom",
+    i: "test",
     ...widgetConfig,
   },
   {
@@ -72,16 +71,33 @@ const LayoutXS = [...LayoutMobile];
 const LayoutSM = [...LayoutDesktop];
 const LayoutMD = [...LayoutDesktop];
 const LayoutLG = [...LayoutDesktop];
+const layouts = {
+  // copy to new
+  xxs: [...LayoutXXS],
+  xs: [...LayoutXS],
+  sm: [...LayoutSM],
+  md: [...LayoutMD],
+  lg: [...LayoutLG],
+} as any;
 
 // Layout Config
 export const layoutConfig = {
   // desc order
   breakpoints: {
-    lg: 1200,
-    md: 996,
-    sm: 768,
-    xs: 480,
-    xxs: 0,
+    width: {
+      lg: 1200,
+      md: 996,
+      sm: 768,
+      xs: 480,
+      xxs: 0,
+    },
+    height: {
+      lg: 1200, // Extra large screens, TV.
+      md: 900, //  Desktops, large screens.
+      sm: 600, // Small screens, laptops.
+      xs: 300, // iPads, Tablets.Small screens, laptops.
+      xxs: 0, // Phones
+    },
   },
 
   // num of cols for each breakpoint
@@ -95,11 +111,11 @@ export const layoutConfig = {
 
   layouts: {
     // copy to new
-    xxs: [...LayoutXXS],
-    xs: [...LayoutXS],
-    sm: [...LayoutSM],
-    md: [...LayoutMD],
-    lg: [...LayoutLG],
+    xxs: Object.assign({}, layouts),
+    xs: Object.assign({}, layouts),
+    sm: Object.assign({}, layouts),
+    md: Object.assign({}, layouts),
+    lg: Object.assign({}, layouts),
   },
 
   margin: [0, 0],

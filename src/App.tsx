@@ -23,7 +23,9 @@ function App() {
           </Suspense>
         </Route>
         <Route path="/resiumig/:user">
-          <Suspense fallback={<Loader />}>{/* <ResiumIG/> */}</Suspense>
+          <Suspense fallback={<Loader />}>
+            <ResiumIG />
+          </Suspense>
         </Route>
       </Switch>
     </Router>

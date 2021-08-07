@@ -1,18 +1,28 @@
 import "./layout-toolbar.scss";
 
+// React
+import { useState } from "react";
+
+// Window Size Hook
+import { useWindowSize } from "@react-hook/window-size";
+
 type LayoutEditorProps = {
-  breakpoints: { [key: string]: number };
-  currBreakpoint: string;
+  bpConfigW: { [key: string]: number };
+  bpConfigH: { [key: string]: number };
   height: number;
   showWidgetResize: boolean;
   toggleShowWidgetResize: () => void;
   showWidgetToolbars: boolean;
   toggleShowWidgetToolbars: () => void;
+  bpW: string;
+  bpH: string;
 };
 
 const LayoutToolbar = ({
-  breakpoints,
-  currBreakpoint,
+  bpConfigW,
+  bpConfigH,
+  bpW,
+  bpH,
   height,
   showWidgetResize,
   toggleShowWidgetResize,
@@ -21,7 +31,12 @@ const LayoutToolbar = ({
 }: LayoutEditorProps) => {
   return (
     <div id="layout-toolbar" style={{ height: height }}>
-      <LayoutStatus currBreakpoint={currBreakpoint} breakpoints={breakpoints} />
+      <LayoutStatus
+        bpW={bpW}
+        bpH={bpH}
+        bpConfigW={bpConfigW}
+        bpConfigH={bpConfigH}
+      />
       <BtnToggleWidgetResize
         showWidgetResize={showWidgetResize}
         toggleShowWidgetResize={toggleShowWidgetResize}
@@ -35,17 +50,47 @@ const LayoutToolbar = ({
 };
 
 type LayoutStatusProps = {
-  breakpoints: { [key: string]: number };
-  currBreakpoint: string;
+  bpConfigW: { [key: string]: number };
+  bpConfigH: { [key: string]: number };
+  bpW: string;
+  bpH: string;
 };
 
-const LayoutStatus = ({ breakpoints, currBreakpoint }: LayoutStatusProps) => {
+const LayoutStatus = ({
+  bpW,
+  bpH,
+  bpConfigW,
+  bpConfigH,
+}: LayoutStatusProps) => {
+  const [width, height] = useWindowSize();
+  const [mode, setMode] = useState<"w" | "h">("w");
+
   return (
     <>
-      {Object.keys(breakpoints)
+      {["w", "h"].map((name) => (
+        <button
+          key={name}
+          className={mode === name ? "on" : ""}
+          onClick={() => setMode(name as "w" | "h")}
+        >
+          {name === "w" ? `w:${width}` : `h:${height}`}
+        </button>
+      ))}
+      {Object.keys(mode === "w" ? bpConfigW : bpConfigH)
         .reverse()
         .map((bp) => (
-          <span key={bp} className={bp === currBreakpoint ? "active" : ""}>
+          <span
+            key={bp}
+            className={
+              mode === "w"
+                ? bp === bpW
+                  ? "active"
+                  : ""
+                : bp === bpH
+                ? "active"
+                : ""
+            }
+          >
             {bp}
           </span>
         ))}
@@ -62,9 +107,10 @@ const BtnToggleWidgetToolbars = ({
   showWidgetToolbars,
   toggleShowWidgetToolbars,
 }: BtnToggleWidgetToolbarsProps) => (
-  <button onClick={toggleShowWidgetToolbars}>{`tlbr:${
-    showWidgetToolbars ? "1" : "0"
-  }`}</button>
+  <button
+    onClick={toggleShowWidgetToolbars}
+    className={showWidgetToolbars ? "on" : ""}
+  >{`tlbr`}</button>
 );
 
 type BtnToggleWidgetResizeProps = {
@@ -76,9 +122,10 @@ const BtnToggleWidgetResize = ({
   showWidgetResize,
   toggleShowWidgetResize,
 }: BtnToggleWidgetResizeProps) => (
-  <button onClick={toggleShowWidgetResize}>{`rsz:${
-    showWidgetResize ? "1" : "0"
-  }`}</button>
+  <button
+    onClick={toggleShowWidgetResize}
+    className={showWidgetResize ? "on" : ""}
+  >{`rsz`}</button>
 );
 
 export default LayoutToolbar;
