@@ -1,6 +1,10 @@
 import GridLayout from "react-grid-layout";
 
 // Widget Config
+type Widget = {
+  staticHeight?: number;
+};
+
 export const widgetConfig = {
   maxW: 32,
   maxH: 32,
@@ -8,6 +12,8 @@ export const widgetConfig = {
   minH: 2,
   isBounded: true,
   moved: false,
+  staticHeight: undefined,
+  edges: [],
 };
 
 // Mobile Layout
@@ -59,6 +65,7 @@ export const LayoutDesktop: GridLayout.Layout[] = [
     y: 0,
     i: "test",
     ...widgetConfig,
+    // staticHeight: 100,
   },
 ].map((p, idx) => {
   // NOTE: i property must be in "{type}-{index}", ex). "test-0" format

@@ -6,7 +6,7 @@ import { useState } from "react";
 // Window Size Hook
 import { useWindowSize } from "@react-hook/window-size";
 
-type LayoutEditorProps = {
+type LayoutToolbarProps = {
   bpConfigW: { [key: string]: number };
   bpConfigH: { [key: string]: number };
   height: number;
@@ -28,7 +28,7 @@ const LayoutToolbar = ({
   toggleShowWidgetResize,
   showWidgetToolbars,
   toggleShowWidgetToolbars,
-}: LayoutEditorProps) => {
+}: LayoutToolbarProps) => {
   return (
     <div id="layout-toolbar" style={{ height: height }}>
       <LayoutStatus
@@ -37,13 +37,15 @@ const LayoutToolbar = ({
         bpConfigW={bpConfigW}
         bpConfigH={bpConfigH}
       />
-      <BtnToggleWidgetResize
-        showWidgetResize={showWidgetResize}
-        toggleShowWidgetResize={toggleShowWidgetResize}
+      <BtnToggle
+        text={"rsz"}
+        on={showWidgetResize}
+        click={toggleShowWidgetResize}
       />
-      <BtnToggleWidgetToolbars
-        showWidgetToolbars={showWidgetToolbars}
-        toggleShowWidgetToolbars={toggleShowWidgetToolbars}
+      <BtnToggle
+        text={"tlbr"}
+        on={showWidgetToolbars}
+        click={toggleShowWidgetToolbars}
       />
     </div>
   );
@@ -98,34 +100,16 @@ const LayoutStatus = ({
   );
 };
 
-type BtnToggleWidgetToolbarsProps = {
-  showWidgetToolbars: boolean;
-  toggleShowWidgetToolbars: () => void;
+type BtnToggle = {
+  text: string;
+  on: boolean;
+  click: () => void;
 };
 
-const BtnToggleWidgetToolbars = ({
-  showWidgetToolbars,
-  toggleShowWidgetToolbars,
-}: BtnToggleWidgetToolbarsProps) => (
-  <button
-    onClick={toggleShowWidgetToolbars}
-    className={showWidgetToolbars ? "on" : ""}
-  >{`tlbr`}</button>
-);
-
-type BtnToggleWidgetResizeProps = {
-  showWidgetResize: boolean;
-  toggleShowWidgetResize: () => void;
-};
-
-const BtnToggleWidgetResize = ({
-  showWidgetResize,
-  toggleShowWidgetResize,
-}: BtnToggleWidgetResizeProps) => (
-  <button
-    onClick={toggleShowWidgetResize}
-    className={showWidgetResize ? "on" : ""}
-  >{`rsz`}</button>
+const BtnToggle = ({ text, on, click }: BtnToggle) => (
+  <button onClick={click} className={on ? "on" : ""}>
+    {text}
+  </button>
 );
 
 export default LayoutToolbar;

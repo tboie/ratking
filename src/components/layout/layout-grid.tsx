@@ -38,10 +38,11 @@ const LayoutGrid = ({
   const [bpW, setbpW] = useState(() => getWindowBreakpoints().width);
   const [bpH, setbpH] = useState(() => getWindowBreakpoints().height);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedWidget, setSelectedWidget] = useState("");
 
   // Get Current Window Width Breakpoint
   function getWindowBreakpoints(): { width: string; height: string } {
-    let bps = { width: "unknown", height: "unknown" };
+    const bps = { width: "unknown", height: "unknown" };
 
     // sort bp's desc and use first bp > value
     ["width", "height"].forEach((dim) =>
@@ -59,8 +60,6 @@ const LayoutGrid = ({
 
   // Save Layout
   function saveLayout(cb: Layout[]) {
-    console.log("before");
-    console.log(layoutConfig.layouts[bpH][bpW]);
     console.log("layout config: ");
     console.log(cb);
     layoutConfig.layouts[bpH][bpW] = [...cb];
@@ -68,19 +67,34 @@ const LayoutGrid = ({
 
   // Widget Components
   const widgets = useMemo(() => {
-    return layoutConfig.layouts[bpH][bpW].map((obj: Layout, idx: number) => (
-      <div id={obj.i} key={obj.i} data-grid={obj}>
+    return layoutConfig.layouts[bpH][bpW].map((widget, idx) => (
+      <div
+        id={widget.i}
+        key={widget.i}
+        data-grid={widget}
+        onClick={() =>
+          setSelectedWidget(widget.i === selectedWidget ? "" : widget.i)
+        }
+        style={{
+          // maxHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
+          // minHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
+          zIndex: widget.i === selectedWidget ? 999999 : 0,
+          border:
+            widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",
+        }}
+      >
         <Widget
           key={idx}
-          type={obj.i.split("-")[0] as WidgetType}
+          type={widget.i.split("-")[0] as WidgetType}
           showToolbar={showWidgetToolbars}
           data={data}
           selectedData={selectedData}
           setSelectedData={(val) => setSelectedData && setSelectedData(val)}
+          selected={selectedWidget === widget.i}
         />
       </div>
     ));
-  }, [bpH, showWidgetToolbars, data, selectedData]);
+  }, [selectedWidget, bpH, showWidgetToolbars, data, selectedData]);
 
   // Reset layout on breakpoint change
   // Widget positioning gets buggy when number of widgets varies

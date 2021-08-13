@@ -54,6 +54,7 @@ export type WidgetType =
 export type WidgetWrapperProps = {
   type: WidgetType;
   showToolbar?: boolean;
+  selected: boolean;
 } & DataProps;
 
 const Widget = ({
@@ -62,15 +63,17 @@ const Widget = ({
   data,
   selectedData,
   setSelectedData,
+  selected,
 }: WidgetWrapperProps) => {
   const p = {
+    selected: selected,
     data: data,
     selectedData: selectedData,
     setSelectedData: setSelectedData,
   };
 
   return (
-    <>
+    <div>
       {showToolbar && <WidgetToolbar type={type} />}
       <WidgetBody>
         <Suspense fallback={<Loader />}>
@@ -92,7 +95,7 @@ const Widget = ({
           {type === "imageslider" && <ImageSlider {...p} />}
         </Suspense>
       </WidgetBody>
-    </>
+    </div>
   );
 };
 
