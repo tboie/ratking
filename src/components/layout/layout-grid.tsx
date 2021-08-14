@@ -2,7 +2,7 @@
 import "./layout-grid.scss";
 
 // React
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useWindowSize } from "@react-hook/window-size";
 
 // Layout
@@ -82,11 +82,6 @@ const LayoutGrid = ({
         id={widget.i}
         key={widget.i}
         data-grid={widget}
-        onMouseDown={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          setSelectedWidget(widget.i === selectedWidget ? "" : widget.i);
-        }}
         style={{
           maxHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
           minHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
@@ -171,6 +166,8 @@ const LayoutGrid = ({
           }}
           onResize={(item) => {
             // console.log(item);
+            // const widgetEle = document.getElementById(selectedWidget);
+            // console.log(widgetEle?.id);
             /*
               var rect = li.getBoundingClientRect();
 

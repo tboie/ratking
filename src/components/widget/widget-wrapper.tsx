@@ -1,7 +1,7 @@
 import "./widget-wrapper.scss";
 
 // React
-import React, { Suspense, useRef } from "react";
+import React, { Suspense } from "react";
 
 // Typescript DataProps type
 import { DataProps } from "../layout/layout-grid";
@@ -73,8 +73,6 @@ const Widget = ({
   staticHeight,
   setStaticHeight,
 }: WidgetWrapperProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-
   const p = {
     i: i,
     selected: selected,
@@ -84,18 +82,14 @@ const Widget = ({
     setSelectedData: setSelectedData,
   };
 
-  const setHeight = () => {
-    setStaticHeight();
-  };
-
   return (
-    <div ref={ref} className="widget-wrapper">
+    <div className="widget-wrapper">
       {showToolbar && (
         <WidgetToolbar
           i={i}
           type={type}
           staticHeight={staticHeight}
-          setStaticHeight={setHeight}
+          setStaticHeight={setStaticHeight}
           selected={selected}
           setSelected={setSelected}
         />
