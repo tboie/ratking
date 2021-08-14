@@ -1,7 +1,7 @@
 import "./widget-wrapper.scss";
 
 // React
-import React, { Suspense } from "react";
+import React, { Suspense, useRef } from "react";
 
 // Typescript DataProps type
 import { DataProps } from "../layout/layout-grid";
@@ -55,6 +55,8 @@ export type WidgetWrapperProps = {
   type: WidgetType;
   showToolbar?: boolean;
   selected: boolean;
+  staticHeight?: number;
+  setStaticHeight: (val?: number) => void;
 } & DataProps;
 
 const Widget = ({
@@ -64,7 +66,11 @@ const Widget = ({
   selectedData,
   setSelectedData,
   selected,
+  staticHeight,
+  setStaticHeight,
 }: WidgetWrapperProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+
   const p = {
     selected: selected,
     data: data,
@@ -72,9 +78,19 @@ const Widget = ({
     setSelectedData: setSelectedData,
   };
 
+  const setHeight = () => {
+    setStaticHeight();
+  };
+
   return (
-    <div>
-      {showToolbar && <WidgetToolbar type={type} />}
+    <div ref={ref} className="widget-wrapper">
+      {showToolbar && (
+        <WidgetToolbar
+          type={type}
+          staticHeight={staticHeight}
+          setStaticHeight={setHeight}
+        />
+      )}
       <WidgetBody>
         <Suspense fallback={<Loader />}>
           {type === "test" && <Test />}

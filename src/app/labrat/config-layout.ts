@@ -65,7 +65,7 @@ export const LayoutDesktop: GridLayout.Layout[] = [
     y: 0,
     i: "test",
     ...widgetConfig,
-    // staticHeight: 100,
+    staticHeight: 100,
   },
 ].map((p, idx) => {
   // NOTE: i property must be in "{type}-{index}", ex). "test-0" format
@@ -99,10 +99,10 @@ export const layoutConfig = {
       xxs: 0,
     },
     height: {
-      lg: 1200, // Extra large screens, TV.
+      /*lg: 1200, // Extra large screens, TV.
       md: 900, //  Desktops, large screens.
       sm: 600, // Small screens, laptops.
-      xs: 300, // iPads, Tablets.Small screens, laptops.
+      xs: 300, // iPads, Tablets.Small screens, laptops.*/
       xxs: 0, // Phones
     },
   },

@@ -6,6 +6,9 @@ import { useState } from "react";
 // Window Size Hook
 import { useWindowSize } from "@react-hook/window-size";
 
+// Components
+import BtnToggle from "../entity/entity-btn-toggle";
+
 type LayoutToolbarProps = {
   bpConfigW: { [key: string]: number };
   bpConfigH: { [key: string]: number };
@@ -99,17 +102,5 @@ const LayoutStatus = ({
     </>
   );
 };
-
-type BtnToggle = {
-  text: string;
-  on: boolean;
-  click: () => void;
-};
-
-const BtnToggle = ({ text, on, click }: BtnToggle) => (
-  <button onClick={click} className={on ? "on" : ""}>
-    {text}
-  </button>
-);
 
 export default LayoutToolbar;

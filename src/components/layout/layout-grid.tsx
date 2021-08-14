@@ -2,7 +2,7 @@
 import "./layout-grid.scss";
 
 // React
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useWindowSize } from "@react-hook/window-size";
 
 // Layout
@@ -39,6 +39,9 @@ const LayoutGrid = ({
   const [bpH, setbpH] = useState(() => getWindowBreakpoints().height);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedWidget, setSelectedWidget] = useState("");
+  const [staticHeights, setStaticHeights] = useState(
+    layoutConfig.layouts[bpH][bpW].map((w) => w.staticHeight)
+  );
 
   // Get Current Window Width Breakpoint
   function getWindowBreakpoints(): { width: string; height: string } {
@@ -60,13 +63,20 @@ const LayoutGrid = ({
 
   // Save Layout
   function saveLayout(cb: Layout[]) {
-    console.log("layout config: ");
-    console.log(cb);
-    layoutConfig.layouts[bpH][bpW] = [...cb];
+    // copy static property
+    layoutConfig.layouts[bpH][bpW] = cb.map((w, idx) => ({
+      staticHeight: layoutConfig.layouts[bpH][bpW][idx].staticHeight,
+      ...w,
+    }));
+
+    console.log("saved layout config: ");
+    console.log(layoutConfig.layouts[bpH][bpW]);
+
+    setStaticHeights(layoutConfig.layouts[bpH][bpW].map((w) => w.staticHeight));
   }
 
   // Widget Components
-  const widgets = useMemo(() => {
+  const widgetComponents = useMemo(() => {
     return layoutConfig.layouts[bpH][bpW].map((widget, idx) => (
       <div
         id={widget.i}
@@ -76,9 +86,9 @@ const LayoutGrid = ({
           setSelectedWidget(widget.i === selectedWidget ? "" : widget.i)
         }
         style={{
-          // maxHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
-          // minHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
-          zIndex: widget.i === selectedWidget ? 999999 : 0,
+          maxHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
+          minHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
+          zIndex: widget.i === selectedWidget ? 9999 : 0,
           border:
             widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",
         }}
@@ -91,10 +101,25 @@ const LayoutGrid = ({
           selectedData={selectedData}
           setSelectedData={(val) => setSelectedData && setSelectedData(val)}
           selected={selectedWidget === widget.i}
+          staticHeight={staticHeights[idx]}
+          setStaticHeight={() => {
+            const h = document.getElementById(widget.i)?.clientHeight;
+            widget.staticHeight
+              ? (widget.staticHeight = undefined)
+              : (widget.staticHeight = h);
+            saveLayout(layoutConfig.layouts[bpH][bpW]);
+          }}
         />
       </div>
     ));
-  }, [selectedWidget, bpH, showWidgetToolbars, data, selectedData]);
+  }, [
+    staticHeights,
+    selectedWidget,
+    bpH,
+    showWidgetToolbars,
+    data,
+    selectedData,
+  ]);
 
   // Reset layout on breakpoint change
   // Widget positioning gets buggy when number of widgets varies
@@ -144,7 +169,7 @@ const LayoutGrid = ({
           onDragStop={saveLayout}
           draggableHandle={layoutConfig.draggableHandle}
         >
-          {widgets}
+          {widgetComponents}
         </ResponsiveGrid>
       )}
       {showToolbar && (
