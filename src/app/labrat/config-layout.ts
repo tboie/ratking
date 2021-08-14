@@ -1,10 +1,6 @@
 import GridLayout from "react-grid-layout";
 
 // Widget Config
-type Widget = {
-  staticHeight?: number;
-};
-
 export const widgetConfig = {
   maxW: 32,
   maxH: 32,

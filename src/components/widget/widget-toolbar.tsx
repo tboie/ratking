@@ -11,15 +11,21 @@ import BtnToggle from "../entity/entity-btn-toggle";
 import { faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 
 type WidgetToolbarProps = {
+  i: string;
   type: WidgetType;
   staticHeight?: number;
   setStaticHeight: () => void;
+  selected: boolean;
+  setSelected: (val: string) => void;
 };
 
 export const WidgetToolbar = ({
+  i,
   type,
   staticHeight,
   setStaticHeight,
+  selected,
+  setSelected,
 }: WidgetToolbarProps) => {
   // Stop dragging when mouse leaves
   /*
@@ -31,7 +37,10 @@ export const WidgetToolbar = ({
   */
 
   return (
-    <div className="widget-toolbar" /*onMouseLeave={mouseLeave}*/>
+    <div
+      className="widget-toolbar"
+      onMouseDown={() => setSelected(i)} /*onMouseLeave={mouseLeave}*/
+    >
       <BtnToggle
         text={"h: "}
         on={staticHeight ? false : true}

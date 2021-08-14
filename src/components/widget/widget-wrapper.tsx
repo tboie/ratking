@@ -52,27 +52,33 @@ export type WidgetType =
   | "imageslider";
 
 export type WidgetWrapperProps = {
+  i: string;
   type: WidgetType;
   showToolbar?: boolean;
   selected: boolean;
+  setSelected: (val: string) => void;
   staticHeight?: number;
   setStaticHeight: (val?: number) => void;
 } & DataProps;
 
 const Widget = ({
+  i,
   type,
   showToolbar,
   data,
   selectedData,
   setSelectedData,
   selected,
+  setSelected,
   staticHeight,
   setStaticHeight,
 }: WidgetWrapperProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const p = {
+    i: i,
     selected: selected,
+    setSelected: setSelected,
     data: data,
     selectedData: selectedData,
     setSelectedData: setSelectedData,
@@ -86,9 +92,12 @@ const Widget = ({
     <div ref={ref} className="widget-wrapper">
       {showToolbar && (
         <WidgetToolbar
+          i={i}
           type={type}
           staticHeight={staticHeight}
           setStaticHeight={setHeight}
+          selected={selected}
+          setSelected={setSelected}
         />
       )}
       <WidgetBody>

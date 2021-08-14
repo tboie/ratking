@@ -82,9 +82,11 @@ const LayoutGrid = ({
         id={widget.i}
         key={widget.i}
         data-grid={widget}
-        onClick={() =>
-          setSelectedWidget(widget.i === selectedWidget ? "" : widget.i)
-        }
+        onMouseDown={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setSelectedWidget(widget.i === selectedWidget ? "" : widget.i);
+        }}
         style={{
           maxHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
           minHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
@@ -95,12 +97,14 @@ const LayoutGrid = ({
       >
         <Widget
           key={idx}
+          i={widget.i}
           type={widget.i.split("-")[0] as WidgetType}
           showToolbar={showWidgetToolbars}
           data={data}
           selectedData={selectedData}
           setSelectedData={(val) => setSelectedData && setSelectedData(val)}
           selected={selectedWidget === widget.i}
+          setSelected={setSelectedWidget}
           staticHeight={staticHeights[idx]}
           setStaticHeight={() => {
             const h = document.getElementById(widget.i)?.clientHeight;
@@ -164,6 +168,21 @@ const LayoutGrid = ({
           onBreakpointChange={(bp) => {
             setRefreshing(true);
             setbpW(bp);
+          }}
+          onResize={(item) => {
+            // console.log(item);
+            /*
+              var rect = li.getBoundingClientRect();
+
+              if (
+                rect.top + rect.height > rectSelection.top &&
+                rect.left + rect.width > rectSelection.left &&
+                rect.bottom - rect.height < rectSelection.bottom &&
+                rect.right - rect.width < rectSelection.right
+              ) {
+                li.classList.add("selected");
+              }
+              */
           }}
           onResizeStop={saveLayout}
           onDragStop={saveLayout}
