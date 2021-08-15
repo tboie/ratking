@@ -133,6 +133,10 @@ const LayoutGrid = ({
   }, [showWidgetResize]);
 
   useEffect(() => {
+    !showWidgetToolbars && setSelectedWidget("");
+  }, [showWidgetToolbars]);
+
+  useEffect(() => {
     setRefreshing(true);
     setbpH(getWindowBreakpoints().height);
   }, [height]);
