@@ -9,7 +9,12 @@ export const widgetConfig = {
   isBounded: true,
   moved: false,
   staticHeight: undefined,
-  edges: [],
+  edges: {
+    t: [],
+    r: [],
+    b: [],
+    l: [],
+  },
 };
 
 // Mobile Layout

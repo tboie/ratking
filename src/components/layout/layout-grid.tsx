@@ -165,21 +165,31 @@ const LayoutGrid = ({
             setbpW(bp);
           }}
           onResize={(item) => {
-            // console.log(item);
-            // const widgetEle = document.getElementById(selectedWidget);
-            // console.log(widgetEle?.id);
-            /*
-              var rect = li.getBoundingClientRect();
+            const widgets = layoutConfig.layouts[bpH][bpW];
 
-              if (
-                rect.top + rect.height > rectSelection.top &&
-                rect.left + rect.width > rectSelection.left &&
-                rect.bottom - rect.height < rectSelection.bottom &&
-                rect.right - rect.width < rectSelection.right
-              ) {
-                li.classList.add("selected");
-              }
-              */
+            widgets.forEach((w1) =>
+              widgets
+                .filter((w) => w1.i !== w.i)
+                .forEach((w2) => {
+                  const rectSelection = document
+                    .getElementById(w1.i)
+                    ?.getBoundingClientRect();
+                  const rect = document
+                    .getElementById(w2.i)
+                    ?.getBoundingClientRect();
+
+                  if (
+                    rectSelection &&
+                    rect &&
+                    rect.top + rect.height > rectSelection.top &&
+                    rect.left + rect.width > rectSelection.left &&
+                    rect.bottom - rect.height < rectSelection.bottom &&
+                    rect.right - rect.width < rectSelection.right
+                  ) {
+                    console.log(w2.i + " collides with " + w1.i);
+                  }
+                })
+            );
           }}
           onResizeStop={saveLayout}
           onDragStop={saveLayout}
