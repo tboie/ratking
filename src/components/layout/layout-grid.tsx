@@ -63,15 +63,30 @@ const LayoutGrid = ({
 
   // Save Layout
   function saveLayout(cb: Layout[]) {
-    // copy static property
+    // copy static property and reset edges
     layoutConfig.layouts[bpH][bpW] = cb.map((w, idx) => ({
       staticHeight: layoutConfig.layouts[bpH][bpW][idx].staticHeight,
+      edges: { t: [], r: [], b: [], l: [] },
       ...w,
     }));
+
+    // get/set connected widget edges
+    const widgets = layoutConfig.layouts[bpH][bpW];
+    widgets.forEach((w1) =>
+      widgets
+        .filter((w) => w1.i !== w.i)
+        .forEach((w2) => {
+          const side = getLongestOverlappingSide(w1, w2);
+          if (side !== "none") {
+            w1.edges[side].push(w2.i);
+          }
+        })
+    );
 
     console.log("saved layout config: ");
     console.log(layoutConfig.layouts[bpH][bpW]);
 
+    // set state
     setStaticHeights(layoutConfig.layouts[bpH][bpW].map((w) => w.staticHeight));
   }
 
@@ -141,6 +156,92 @@ const LayoutGrid = ({
     setbpH(getWindowBreakpoints().height);
   }, [height]);
 
+  // TODO: refurbish ***crude*** works kinda
+  function getLongestOverlappingSide(w1, w2): "t" | "r" | "b" | "l" | "none" {
+    let side: "t" | "r" | "b" | "l" | "none" = "none";
+
+    const rectSelection = document
+      .getElementById(w1.i)
+      ?.getBoundingClientRect();
+    const rect = document.getElementById(w2.i)?.getBoundingClientRect();
+
+    // boundary for collision detection
+    const boundary = 6;
+    const t = rectSelection?.top ? rectSelection?.top - boundary : 0,
+      r = rectSelection?.right ? rectSelection?.right + boundary : 0,
+      b = rectSelection?.bottom ? rectSelection?.bottom + boundary : 0,
+      l = rectSelection?.left ? rectSelection?.left - boundary : 0;
+
+    // colliding sides
+    let left = false,
+      right = false,
+      top = false,
+      bottom = false;
+
+    if (
+      rectSelection &&
+      rect &&
+      // collides or not
+      rect.top + rect.height > t &&
+      rect.left + rect.width > l &&
+      rect.bottom - rect.height < b &&
+      rect.right - rect.width < r
+    ) {
+      // get sides
+      if (rect.top < t && rect.top + rect.height > t) {
+        top = true;
+      }
+      if (rect.bottom > b && rect.bottom - rect.height < b) {
+        bottom = true;
+      }
+      if (rect.right > r && rect.right - rect.width < r) {
+        right = true;
+      }
+      if (rect.left < l && rect.left + rect.width > l) {
+        left = true;
+      }
+
+      // get distances of overlapping intersections
+      // TODO: buggy
+      let dy = 0,
+        dx = 0;
+
+      if (rect.top > rectSelection.top) {
+        dy += rect.top - rectSelection.top;
+      }
+      if (rect.bottom < rectSelection.bottom) {
+        dy += rectSelection.bottom - rect.bottom;
+      }
+      if (rect.left > rectSelection.left) {
+        dx += rect.left - rectSelection.left;
+      }
+      if (rect.right < rectSelection.right) {
+        dx += rectSelection.right - rect.right;
+      }
+
+      // determine greater horizonal or vertical overlap and set side
+      // TODO: verify
+      const overlapX = rectSelection.width - dx,
+        overlapY = rectSelection.height - dy;
+
+      if (overlapX > overlapY) {
+        if (top) {
+          side = "t";
+        } else if (bottom) {
+          side = "b";
+        }
+      } else if (overlapY >= overlapX) {
+        if (right) {
+          side = "r";
+        } else if (left) {
+          side = "l";
+        }
+      }
+    }
+
+    return side;
+  }
+
   // Layout Height
   const layoutHeight = showToolbar
     ? height - layoutConfig.toolbar.height
@@ -168,33 +269,7 @@ const LayoutGrid = ({
             setRefreshing(true);
             setbpW(bp);
           }}
-          onResize={(item) => {
-            const widgets = layoutConfig.layouts[bpH][bpW];
-
-            widgets.forEach((w1) =>
-              widgets
-                .filter((w) => w1.i !== w.i)
-                .forEach((w2) => {
-                  const rectSelection = document
-                    .getElementById(w1.i)
-                    ?.getBoundingClientRect();
-                  const rect = document
-                    .getElementById(w2.i)
-                    ?.getBoundingClientRect();
-
-                  if (
-                    rectSelection &&
-                    rect &&
-                    rect.top + rect.height > rectSelection.top &&
-                    rect.left + rect.width > rectSelection.left &&
-                    rect.bottom - rect.height < rectSelection.bottom &&
-                    rect.right - rect.width < rectSelection.right
-                  ) {
-                    console.log(w2.i + " collides with " + w1.i);
-                  }
-                })
-            );
-          }}
+          //onResize={saveLayout}
           onResizeStop={saveLayout}
           onDragStop={saveLayout}
           draggableHandle={layoutConfig.draggableHandle}
