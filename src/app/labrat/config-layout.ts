@@ -8,7 +8,7 @@ export const widgetConfig = {
   minH: 2,
   isBounded: true,
   isResizable: true,
-  moved: false,
+  staticWidth: undefined,
   staticHeight: undefined,
   edges: {
     t: [],

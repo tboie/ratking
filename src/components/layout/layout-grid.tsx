@@ -42,6 +42,9 @@ const LayoutGrid = ({
   const [staticHeights, setStaticHeights] = useState(
     layoutConfig.layouts[bpH][bpW].map((w) => w.staticHeight)
   );
+  const [staticWidths, setStaticWidths] = useState(
+    layoutConfig.layouts[bpH][bpW].map((w) => w.staticWidth)
+  );
 
   // Layout Height
   const layoutHeight = showToolbar
@@ -76,6 +79,7 @@ const LayoutGrid = ({
     // copy static property and reset edges
     layoutConfig.layouts[bpH][bpW] = cb.map((w, idx) => ({
       staticHeight: layoutConfig.layouts[bpH][bpW][idx].staticHeight,
+      staticWidth: layoutConfig.layouts[bpH][bpW][idx].staticWidth,
       // TODO: remove resize for static widgets
       // isResizable: layoutConfig.layouts[bpH][bpW][idx].staticHeight,
       edges: { t: [], r: [], b: [], l: [] },
@@ -99,6 +103,7 @@ const LayoutGrid = ({
     console.log(layoutConfig.layouts[bpH][bpW]);
 
     // set state
+    setStaticWidths(layoutConfig.layouts[bpH][bpW].map((w) => w.staticWidth));
     setStaticHeights(layoutConfig.layouts[bpH][bpW].map((w) => w.staticHeight));
   }
 
@@ -117,11 +122,31 @@ const LayoutGrid = ({
       );
     };
 
+    const calcLeft = (names: string[]) => {
+      const staticWidgets = names
+        .filter((n) => widgets.find((w) => w.i === n)?.staticWidth)
+        .map((i) => widgets.find((w) => w.i === i));
+
+      return (
+        (coordToPx(staticWidgets[0]?.w) - staticWidgets[0]?.staticWidth || 0) *
+        -1
+      );
+    };
+
     const calcHeight = (w: any): string => {
       if (w.staticHeight) {
         return `${w.staticHeight}px`;
       } else if (w.edges.t.length && calcTop(w.edges.t)) {
         return `${coordToPx(w.h) + calcTop(w.edges.t) * -1}px`;
+      }
+      return "";
+    };
+
+    const calcWidth = (w: any): string => {
+      if (w.staticWidth) {
+        return `${w.staticWidth}px`;
+      } else if (w.edges.l.length && calcLeft(w.edges.l)) {
+        return `${coordToPx(w.w) + calcLeft(w.edges.l) * -1}px`;
       }
       return "";
     };
@@ -134,6 +159,8 @@ const LayoutGrid = ({
         style={{
           maxHeight: calcHeight(widget),
           minHeight: calcHeight(widget),
+          maxWidth: calcWidth(widget),
+          minWidth: calcWidth(widget),
           zIndex: widget.i === selectedWidget ? 9999 : 0,
           // TODO: re-implement, buggy after widget static height feature
           /*border:
@@ -141,6 +168,10 @@ const LayoutGrid = ({
           top:
             !widget.staticHeight && widget.edges.t.length
               ? calcTop(widget.edges.t)
+              : "",
+          left:
+            !widget.staticWidth && widget.edges.l.length
+              ? calcTop(widget.edges.l)
               : "",
         }}
       >
@@ -154,6 +185,7 @@ const LayoutGrid = ({
           setSelectedData={(val) => setSelectedData && setSelectedData(val)}
           selected={selectedWidget === widget.i}
           setSelected={setSelectedWidget}
+          staticWidth={staticWidths[idx]}
           staticHeight={staticHeights[idx]}
           setStaticHeight={() => {
             const h = document.getElementById(widget.i)?.clientHeight;
@@ -161,6 +193,14 @@ const LayoutGrid = ({
               ? (widget.staticHeight = undefined)
               : // +2 for border
                 (widget.staticHeight = h ? h + 2 : undefined);
+            saveLayout(layoutConfig.layouts[bpH][bpW]);
+          }}
+          setStaticWidth={() => {
+            const w = document.getElementById(widget.i)?.clientWidth;
+            widget.staticWidth
+              ? (widget.staticWidth = undefined)
+              : // +2 for border
+                (widget.staticWidth = w ? w + 2 : undefined);
             saveLayout(layoutConfig.layouts[bpH][bpW]);
           }}
         />

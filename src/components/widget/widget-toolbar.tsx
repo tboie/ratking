@@ -15,6 +15,8 @@ type WidgetToolbarProps = {
   type: WidgetType;
   staticHeight?: number;
   setStaticHeight: () => void;
+  staticWidth?: number;
+  setStaticWidth: () => void;
   selected: boolean;
   setSelected: (val: string) => void;
 };
@@ -24,6 +26,8 @@ export const WidgetToolbar = ({
   type,
   staticHeight,
   setStaticHeight,
+  staticWidth,
+  setStaticWidth,
   selected,
   setSelected,
 }: WidgetToolbarProps) => {
@@ -42,12 +46,20 @@ export const WidgetToolbar = ({
       // TODO: re-implement, buggy after adding widget static height feature
       // onMouseDown={() => setSelected(i)} /*onMouseLeave={mouseLeave}*/
     >
-      <BtnToggle
-        text={"h: "}
-        on={staticHeight ? false : true}
-        icon={staticHeight ? faLock : faLockOpen}
-        click={setStaticHeight}
-      />
+      <div>
+        <BtnToggle
+          text={"w: "}
+          on={staticWidth ? false : true}
+          icon={staticWidth ? faLock : faLockOpen}
+          click={setStaticWidth}
+        />
+        <BtnToggle
+          text={"h: "}
+          on={staticHeight ? false : true}
+          icon={staticHeight ? faLock : faLockOpen}
+          click={setStaticHeight}
+        />
+      </div>
       <span className="widget-toolbar-title">{type}</span>
       <div />
     </div>

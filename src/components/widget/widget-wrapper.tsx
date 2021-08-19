@@ -58,7 +58,9 @@ export type WidgetWrapperProps = {
   selected: boolean;
   setSelected: (val: string) => void;
   staticHeight?: number;
+  staticWidth?: number;
   setStaticHeight: (val?: number) => void;
+  setStaticWidth: (val?: number) => void;
 } & DataProps;
 
 const Widget = ({
@@ -70,6 +72,8 @@ const Widget = ({
   setSelectedData,
   selected,
   setSelected,
+  staticWidth,
+  setStaticWidth,
   staticHeight,
   setStaticHeight,
 }: WidgetWrapperProps) => {
@@ -88,6 +92,8 @@ const Widget = ({
         <WidgetToolbar
           i={i}
           type={type}
+          staticWidth={staticWidth}
+          setStaticWidth={setStaticWidth}
           staticHeight={staticHeight}
           setStaticHeight={setStaticHeight}
           selected={selected}
