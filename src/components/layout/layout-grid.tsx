@@ -171,7 +171,7 @@ const LayoutGrid = ({
               : "",
           left:
             !widget.staticWidth && widget.edges.l.length
-              ? calcTop(widget.edges.l)
+              ? calcLeft(widget.edges.l)
               : "",
         }}
       >
