@@ -39,7 +39,8 @@ export const WidgetToolbar = ({
   return (
     <div
       className="widget-toolbar"
-      onMouseDown={() => setSelected(i)} /*onMouseLeave={mouseLeave}*/
+      // TODO: re-implement, buggy after adding widget static height feature
+      // onMouseDown={() => setSelected(i)} /*onMouseLeave={mouseLeave}*/
     >
       <BtnToggle
         text={"h: "}

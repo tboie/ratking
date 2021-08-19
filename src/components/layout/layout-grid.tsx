@@ -13,8 +13,8 @@ import LayoutToolbar from "./layout-toolbar";
 // Component Data Props Type
 export type DataProps = {
   data?: any; // Core data object
-  selectedData?: any; // Selected obj from user data
-  setSelectedData?: (val: any) => void; // Earth HTML element (child ref)
+  selectedData?: any; // Selected data set
+  setSelectedData?: (val: any) => void; // Set selected data obj
 };
 
 // Layout Grid Props Type
@@ -43,6 +43,11 @@ const LayoutGrid = ({
     layoutConfig.layouts[bpH][bpW].map((w) => w.staticHeight)
   );
 
+  // Layout Height
+  const layoutHeight = showToolbar
+    ? height - layoutConfig.toolbar.height
+    : height;
+
   // Get Current Window Width Breakpoint
   function getWindowBreakpoints(): { width: string; height: string } {
     const bps = { width: "unknown", height: "unknown" };
@@ -61,11 +66,18 @@ const LayoutGrid = ({
     return bps;
   }
 
+  // grid layout coords to px
+  function coordToPx(val: number): number {
+    return val * (layoutHeight / widgetConfig.maxH);
+  }
+
   // Save Layout
   function saveLayout(cb: Layout[]) {
     // copy static property and reset edges
     layoutConfig.layouts[bpH][bpW] = cb.map((w, idx) => ({
       staticHeight: layoutConfig.layouts[bpH][bpW][idx].staticHeight,
+      // TODO: remove resize for static widgets
+      // isResizable: layoutConfig.layouts[bpH][bpW][idx].staticHeight,
       edges: { t: [], r: [], b: [], l: [] },
       ...w,
     }));
@@ -92,17 +104,44 @@ const LayoutGrid = ({
 
   // Widget Components
   const widgetComponents = useMemo(() => {
-    return layoutConfig.layouts[bpH][bpW].map((widget, idx) => (
+    const widgets = layoutConfig.layouts[bpH][bpW];
+
+    const calcTop = (names: string[]) => {
+      const staticWidgets = names
+        .filter((n) => widgets.find((w) => w.i === n)?.staticHeight)
+        .map((i) => widgets.find((w) => w.i === i));
+
+      return (
+        (coordToPx(staticWidgets[0]?.h) - staticWidgets[0]?.staticHeight || 0) *
+        -1
+      );
+    };
+
+    const calcHeight = (w: any): string => {
+      if (w.staticHeight) {
+        return `${w.staticHeight}px`;
+      } else if (w.edges.t.length && calcTop(w.edges.t)) {
+        return `${coordToPx(w.h) + calcTop(w.edges.t) * -1}px`;
+      }
+      return "";
+    };
+
+    return widgets.map((widget, idx) => (
       <div
         id={widget.i}
         key={widget.i}
         data-grid={widget}
         style={{
-          maxHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
-          minHeight: widget.staticHeight ? `${widget.staticHeight}px` : "",
+          maxHeight: calcHeight(widget),
+          minHeight: calcHeight(widget),
           zIndex: widget.i === selectedWidget ? 9999 : 0,
-          border:
-            widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",
+          // TODO: re-implement, buggy after widget static height feature
+          /*border:
+            widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",*/
+          top:
+            !widget.staticHeight && widget.edges.t.length
+              ? calcTop(widget.edges.t)
+              : "",
         }}
       >
         <Widget
@@ -120,7 +159,8 @@ const LayoutGrid = ({
             const h = document.getElementById(widget.i)?.clientHeight;
             widget.staticHeight
               ? (widget.staticHeight = undefined)
-              : (widget.staticHeight = h);
+              : // +2 for border
+                (widget.staticHeight = h ? h + 2 : undefined);
             saveLayout(layoutConfig.layouts[bpH][bpW]);
           }}
         />
@@ -133,6 +173,8 @@ const LayoutGrid = ({
     showWidgetToolbars,
     data,
     selectedData,
+    width,
+    height,
   ]);
 
   // Reset layout on breakpoint change
@@ -242,11 +284,6 @@ const LayoutGrid = ({
     return side;
   }
 
-  // Layout Height
-  const layoutHeight = showToolbar
-    ? height - layoutConfig.toolbar.height
-    : height;
-
   return (
     <>
       {!refreshing && (
@@ -269,7 +306,7 @@ const LayoutGrid = ({
             setRefreshing(true);
             setbpW(bp);
           }}
-          //onResize={saveLayout}
+          // onResize={() => console.log(coordToPx(16))} /*saveLayout*/
           onResizeStop={saveLayout}
           onDragStop={saveLayout}
           draggableHandle={layoutConfig.draggableHandle}

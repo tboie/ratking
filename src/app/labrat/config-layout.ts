@@ -7,6 +7,7 @@ export const widgetConfig = {
   minW: 5,
   minH: 2,
   isBounded: true,
+  isResizable: true,
   moved: false,
   staticHeight: undefined,
   edges: {
@@ -66,7 +67,6 @@ export const LayoutDesktop: GridLayout.Layout[] = [
     y: 0,
     i: "test",
     ...widgetConfig,
-    staticHeight: 100,
   },
 ].map((p, idx) => {
   // NOTE: i property must be in "{type}-{index}", ex). "test-0" format
