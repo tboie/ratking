@@ -330,6 +330,11 @@ const LayoutGrid = ({
         <ResponsiveGrid
           style={{
             minHeight: layoutHeight,
+            // Grid lines
+            backgroundSize: `${
+              width ? width / layoutConfig.cols[bpW] : "0"
+            }px ${layoutHeight / widgetConfig.maxH}px`,
+            backgroundImage: `linear-gradient(to right, #202020 1px, transparent 1px), linear-gradient(to bottom, #202020 1px, transparent 1px)`,
           }}
           width={width}
           layouts={layoutConfig.layouts[bpH]}
