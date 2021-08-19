@@ -1,6 +1,12 @@
 # RatKing
 CONCEPT: Universal Website Layout/Widget UI Generator
 
+Features:
+Responsive Width/Height Breakpoint Layouts
+Responsive Grid Widgets
+Static Width/Height Widgets
+Sticky Static Widget Sides
+
 WIDGETS INCLUDED:
 - Chatroom (irc)
 - Code editor
