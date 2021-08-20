@@ -1,7 +1,7 @@
 import "./entity-processing.scss";
 
 // React
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // Resize Observer
 import useResizeObserver from "use-resize-observer";
@@ -30,19 +30,13 @@ const ProcessingWidget = () => {
     x++;
   };
 
-  useEffect(() => {
-    resize();
-  }, [processing]);
-
-  useEffect(() => {
-    resize();
-  }, [width, height]);
-
   const resize = () => {
     if (processing && ref) {
       processing.resizeCanvas(width, height);
     }
   };
+
+  useEffect(resize, [width, height, processing]);
 
   return (
     <div className="entity-processing" ref={ref}>

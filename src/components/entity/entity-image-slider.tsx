@@ -74,6 +74,7 @@ const ImageSlider = ({
           <img
             ref={(ele) => ele && imgRefs.current.push(ele)}
             src={genPhotoURL(d)}
+            alt={""}
           />
         </div>
       ))}

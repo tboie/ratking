@@ -28,7 +28,7 @@ const ImageCarousel = ({ selectedData }: ImageCarouselProps) => {
       <Carousel showThumbs={false} showArrows={true} emulateTouch={true}>
         {new Array(selectedData!.numPhotos).fill(0).map((i, idx) => (
           <div className="carousel-content-container" key={idx}>
-            <img src={genPhotoURL()} />
+            <img src={genPhotoURL()} alt={""} />
             <span className="legend">{selectedData!.caption}</span>
           </div>
         ))}

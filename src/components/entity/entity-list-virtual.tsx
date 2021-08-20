@@ -18,17 +18,16 @@ const ListVirtual = ({ selectedData }: ListVirtualProps) => {
   let url = useLocation();
   const [items, setItems] = useState<any>([]);
 
-  const getData = async () => {
-    if (selectedData) {
-      fetch(`${url.pathname}/${selectedData.photo}_comments.json`)
-        .then((resp) => resp.json())
-        .then((d) => {
-          setItems([...d]);
-        });
-    }
-  };
-
   useEffect(() => {
+    const getData = async () => {
+      if (selectedData) {
+        fetch(`${url.pathname}/${selectedData.photo}_comments.json`)
+          .then((resp) => resp.json())
+          .then((d) => {
+            setItems([...d]);
+          });
+      }
+    };
     getData();
   }, [selectedData]);
 
