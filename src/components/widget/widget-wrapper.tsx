@@ -38,7 +38,7 @@ const ImageSlider = React.lazy(() => import("../entity/entity-image-slider"));
 export type WidgetType =
   | "test"
   | "chart"
-  | "codeeditor"
+  | "code-editor"
   | "video"
   | "audio-editor"
   | "ratking"
@@ -46,10 +46,10 @@ export type WidgetType =
   | "processing"
   | "nav"
   | "content"
-  | "imagecarousel"
-  | "listvirtual"
-  | "mediacontrols"
-  | "imageslider";
+  | "image-carousel"
+  | "list-virtual"
+  | "media-controls"
+  | "image-slider";
 
 export type WidgetWrapperProps = {
   i: string;
@@ -104,7 +104,7 @@ const Widget = ({
         <Suspense fallback={<Loader />}>
           {type === "test" && <Test />}
           {type === "chart" && <Chart type="bar" />}
-          {type === "codeeditor" && <CodeEditor />}
+          {type === "code-editor" && <CodeEditor />}
           {type === "video" && <Video url="/videos/Audio_bands_Feed.mov" />}
           {type === "audio-editor" && (
             <AudioWaveform url="/videos/Audio_bands_Feed.mov" />
@@ -114,10 +114,10 @@ const Widget = ({
           {type === "processing" && <Processing />}
           {type === "nav" && <Nav />}
           {type === "content" && <Content />}
-          {type === "imagecarousel" && <ImageCarousel {...p} />}
-          {type === "listvirtual" && <ListVirtual {...p} />}
-          {type === "mediacontrols" && <MediaControls {...p} />}
-          {type === "imageslider" && <ImageSlider {...p} />}
+          {type === "image-carousel" && <ImageCarousel {...p} />}
+          {type === "list-virtual" && <ListVirtual {...p} />}
+          {type === "media-controls" && <MediaControls {...p} />}
+          {type === "image-slider" && <ImageSlider {...p} />}
         </Suspense>
       </WidgetBody>
     </div>

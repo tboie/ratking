@@ -7,12 +7,21 @@ export const widgetConfig = {
   minW: 5,
   minH: 2,
   isBounded: true,
+  isResizable: true,
+  staticWidth: undefined,
+  staticHeight: undefined,
+  edges: {
+    t: [],
+    r: [],
+    b: [],
+    l: [],
+  },
 };
 
 // Desktop Layout
 export const LayoutLG: GridLayout.Layout[] = [
   {
-    i: "imagecarousel",
+    i: "image-carousel",
     x: 0,
     y: 0,
     w: 10,
@@ -20,7 +29,7 @@ export const LayoutLG: GridLayout.Layout[] = [
     ...widgetConfig,
   },
   {
-    i: "listvirtual",
+    i: "list-virtual",
     x: 0,
     y: 25,
     w: 10,
@@ -28,14 +37,14 @@ export const LayoutLG: GridLayout.Layout[] = [
     ...widgetConfig,
   },
   {
-    i: "imageslider",
+    i: "image-slider",
     x: 10,
     y: 25,
     w: 22,
     h: 7,
     ...widgetConfig,
   },
-  { i: "mediacontrols", w: 5, h: 2, x: 19, y: 0, ...widgetConfig },
+  { i: "media-controls", w: 5, h: 2, x: 19, y: 0, ...widgetConfig },
 ].map((p, idx) => {
   // NOTE: i property must be in "{type}-{index}", ex). "test-0" format
   p.i = `${p.i}-${idx}`;
@@ -48,7 +57,7 @@ const LayoutMD: GridLayout.Layout[] = [
     h: 18,
     x: 0,
     y: 0,
-    i: "imagecarousel",
+    i: "image-carousel",
     ...widgetConfig,
   },
   {
@@ -56,7 +65,7 @@ const LayoutMD: GridLayout.Layout[] = [
     h: 7,
     x: 0,
     y: 18,
-    i: "listvirtual",
+    i: "list-virtual",
     ...widgetConfig,
   },
   {
@@ -64,7 +73,7 @@ const LayoutMD: GridLayout.Layout[] = [
     h: 7,
     x: 0,
     y: 25,
-    i: "imageslider",
+    i: "image-slider",
     ...widgetConfig,
   },
   {
@@ -72,7 +81,7 @@ const LayoutMD: GridLayout.Layout[] = [
     h: 2,
     x: 19,
     y: 0,
-    i: "mediacontrols",
+    i: "media-controls",
     ...widgetConfig,
   },
 ].map((p, idx) => {
@@ -88,7 +97,7 @@ const LayoutSM: GridLayout.Layout[] = [
     h: 18,
     x: 0,
     y: 0,
-    i: "imagecarousel",
+    i: "image-carousel",
     ...widgetConfig,
   },
   {
@@ -96,7 +105,7 @@ const LayoutSM: GridLayout.Layout[] = [
     h: 7,
     x: 0,
     y: 18,
-    i: "listvirtual",
+    i: "list-virtual",
     ...widgetConfig,
   },
   {
@@ -104,7 +113,7 @@ const LayoutSM: GridLayout.Layout[] = [
     h: 7,
     x: 0,
     y: 25,
-    i: "imageslider",
+    i: "image-slider",
     ...widgetConfig,
   },
   {
@@ -112,7 +121,7 @@ const LayoutSM: GridLayout.Layout[] = [
     h: 2,
     x: 19,
     y: 0,
-    i: "mediacontrols",
+    i: "media-controls",
     ...widgetConfig,
   },
 ].map((p, idx) => {
@@ -128,7 +137,7 @@ export const LayoutXS: GridLayout.Layout[] = [
     h: 10,
     x: 0,
     y: 22,
-    i: "imageslider",
+    i: "image-slider",
     ...widgetConfig,
   },
 ];

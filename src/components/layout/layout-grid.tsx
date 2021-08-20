@@ -178,7 +178,7 @@ const LayoutGrid = ({
         <Widget
           key={idx}
           i={widget.i}
-          type={widget.i.split("-")[0] as WidgetType}
+          type={widget.i.substr(0, widget.i.lastIndexOf("-")) as WidgetType}
           showToolbar={showWidgetToolbars}
           data={data}
           selectedData={selectedData}
