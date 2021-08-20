@@ -16,7 +16,7 @@ import Loader from "./widget-loader";
 // Widget Components
 const Test = React.lazy(() => import("../entity/entity-test"));
 const Chart = React.lazy(() => import("../entity/entity-chart"));
-const JSONEditor = React.lazy(() => import("../entity/entity-json-editor"));
+const CodeEditor = React.lazy(() => import("../entity/entity-code-editor"));
 const Video = React.lazy(() => import("../entity/entity-video"));
 const AudioWaveform = React.lazy(
   () => import("../entity/entity-audio-waveform")
@@ -38,7 +38,7 @@ const ImageSlider = React.lazy(() => import("../entity/entity-image-slider"));
 export type WidgetType =
   | "test"
   | "chart"
-  | "json-editor"
+  | "codeeditor"
   | "video"
   | "audio-editor"
   | "ratking"
@@ -104,7 +104,7 @@ const Widget = ({
         <Suspense fallback={<Loader />}>
           {type === "test" && <Test />}
           {type === "chart" && <Chart type="bar" />}
-          {type === "json-editor" && <JSONEditor />}
+          {type === "codeeditor" && <CodeEditor />}
           {type === "video" && <Video url="/videos/Audio_bands_Feed.mov" />}
           {type === "audio-editor" && (
             <AudioWaveform url="/videos/Audio_bands_Feed.mov" />

@@ -1,4 +1,4 @@
-import "./entity-json-editor.scss";
+import "./entity-code-editor.scss";
 
 import AceEditor from "react-ace";
 import "ace-builds/webpack-resolver";
