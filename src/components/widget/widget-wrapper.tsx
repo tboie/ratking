@@ -34,6 +34,7 @@ const MediaControls = React.lazy(
   () => import("../entity/entity-media-controls")
 );
 const ImageSlider = React.lazy(() => import("../entity/entity-image-slider"));
+const Discord = React.lazy(() => import("../entity/entity-chat-discord"));
 
 export type WidgetType =
   | "test"
@@ -49,7 +50,8 @@ export type WidgetType =
   | "image-carousel"
   | "list-virtual"
   | "media-controls"
-  | "image-slider";
+  | "image-slider"
+  | "discord";
 
 export type WidgetWrapperProps = {
   i: string;
@@ -117,7 +119,8 @@ const Widget = ({
           {type === "image-carousel" && <ImageCarousel {...p} />}
           {type === "list-virtual" && <ListVirtual {...p} />}
           {type === "media-controls" && <MediaControls {...p} />}
-          {type === "image-slider" && <ImageSlider {...p} />}
+          {type === "image-slider" && <ImageSlider {...p} />}{" "}
+          {/*type === "discord" && <Discord {...p} />*/}
         </Suspense>
       </WidgetBody>
     </div>
