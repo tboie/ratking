@@ -22,7 +22,7 @@ const AudioWaveform = React.lazy(
   () => import("../entity/entity-audio-waveform")
 );
 const RatKing = React.lazy(() => import("../entity/entity-ratking"));
-const ChatRoom = React.lazy(() => import("../entity/entity-chatroom"));
+const ChatRoom = React.lazy(() => import("../entity/entity-chat-irc"));
 const Processing = React.lazy(() => import("../entity/entity-processing"));
 const Nav = React.lazy(() => import("../entity/entity-nav"));
 const Content = React.lazy(() => import("../entity/entity-content"));
@@ -43,7 +43,7 @@ export type WidgetType =
   | "video"
   | "audio-editor"
   | "ratking"
-  | "chatroom"
+  | "irc"
   | "processing"
   | "nav"
   | "content"
@@ -112,7 +112,7 @@ const Widget = ({
             <AudioWaveform url="/videos/Audio_bands_Feed.mov" />
           )}
           {type === "ratking" && <RatKing />}
-          {type === "chatroom" && <ChatRoom />}
+          {type === "irc" && <ChatRoom />}
           {type === "processing" && <Processing />}
           {type === "nav" && <Nav />}
           {type === "content" && <Content />}

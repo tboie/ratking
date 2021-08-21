@@ -70,8 +70,12 @@ const LayoutGrid = ({
   }
 
   // grid layout coords to px
-  function coordToPx(val: number): number {
-    return val * (layoutHeight / widgetConfig.maxH);
+  function coordToPx(val: number, dim: "w" | "h"): number {
+    return (
+      val *
+      ((dim === "h" ? layoutHeight : width) /
+        (dim === "h" ? widgetConfig.maxH : widgetConfig.maxW))
+    );
   }
 
   // Save Layout
@@ -93,8 +97,13 @@ const LayoutGrid = ({
         .filter((w) => w1.i !== w.i)
         .forEach((w2) => {
           const side = getLongestOverlappingSide(w1, w2);
+
           if (side !== "none") {
             w1.edges[side].push(w2.i);
+
+            w1.edges[side] = w1.edges[side].filter(
+              (s, idx) => w1.edges[side].indexOf(s) === idx
+            );
           }
         })
     );
@@ -117,8 +126,8 @@ const LayoutGrid = ({
         .map((i) => widgets.find((w) => w.i === i));
 
       return (
-        (coordToPx(staticWidgets[0]?.h) - staticWidgets[0]?.staticHeight || 0) *
-        -1
+        (coordToPx(staticWidgets[0]?.h, "h") - staticWidgets[0]?.staticHeight ||
+          0) * -1
       );
     };
 
@@ -128,8 +137,8 @@ const LayoutGrid = ({
         .map((i) => widgets.find((w) => w.i === i));
 
       return (
-        (coordToPx(staticWidgets[0]?.w) - staticWidgets[0]?.staticWidth || 0) *
-        -1
+        (coordToPx(staticWidgets[0]?.w, "w") - staticWidgets[0]?.staticWidth ||
+          0) * -1
       );
     };
 
@@ -137,7 +146,7 @@ const LayoutGrid = ({
       if (w.staticHeight) {
         return `${w.staticHeight}px`;
       } else if (w.edges.t.length && calcTop(w.edges.t)) {
-        return `${coordToPx(w.h) + calcTop(w.edges.t) * -1}px`;
+        return `${coordToPx(w.h, "h") + calcTop(w.edges.t) * -1}px`;
       }
       return "";
     };
@@ -146,7 +155,7 @@ const LayoutGrid = ({
       if (w.staticWidth) {
         return `${w.staticWidth}px`;
       } else if (w.edges.l.length && calcLeft(w.edges.l)) {
-        return `${coordToPx(w.w) + calcLeft(w.edges.l) * -1}px`;
+        return `${coordToPx(w.w, "w") + calcLeft(w.edges.l) * -1}px`;
       }
       return "";
     };
@@ -164,7 +173,8 @@ const LayoutGrid = ({
           zIndex: widget.i === selectedWidget ? 9999 : 0,
           // TODO: re-implement, buggy after widget static height feature
           /*border:
-            widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",*/
+            widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",
+          */
           top:
             !widget.staticHeight && widget.edges.t.length
               ? calcTop(widget.edges.t)
@@ -208,6 +218,7 @@ const LayoutGrid = ({
     ));
   }, [
     staticHeights,
+    staticWidths,
     selectedWidget,
     bpH,
     showWidgetToolbars,
