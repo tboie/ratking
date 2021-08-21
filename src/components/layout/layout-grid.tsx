@@ -101,6 +101,8 @@ const LayoutGrid = ({
           if (side !== "none") {
             w1.edges[side].push(w2.i);
 
+            // remove duplicates
+            // TODO: needed? verify...
             w1.edges[side] = w1.edges[side].filter(
               (s, idx) => w1.edges[side].indexOf(s) === idx
             );
@@ -120,6 +122,7 @@ const LayoutGrid = ({
   const widgetComponents = useMemo(() => {
     const widgets = layoutConfig.layouts[bpH][bpW];
 
+    // static widget coordinate height in pixels subtracted by static height
     const calcTop = (names: string[]) => {
       const staticWidgets = names
         .filter((n) => widgets.find((w) => w.i === n)?.staticHeight)
@@ -131,6 +134,7 @@ const LayoutGrid = ({
       );
     };
 
+    // static widget coordinate width in pixels subtracted by static height
     const calcLeft = (names: string[]) => {
       const staticWidgets = names
         .filter((n) => widgets.find((w) => w.i === n)?.staticWidth)
@@ -142,19 +146,25 @@ const LayoutGrid = ({
       );
     };
 
+    // calc widget height
     const calcHeight = (w: any): string => {
       if (w.staticHeight) {
         return `${w.staticHeight}px`;
-      } else if (w.edges.t.length && calcTop(w.edges.t)) {
+      } // check widget connected at top edge and is static
+      else if (w.edges.t.length && calcTop(w.edges.t)) {
+        // h - offset
         return `${coordToPx(w.h, "h") + calcTop(w.edges.t) * -1}px`;
       }
       return "";
     };
 
+    // calc widget width
     const calcWidth = (w: any): string => {
       if (w.staticWidth) {
         return `${w.staticWidth}px`;
-      } else if (w.edges.l.length && calcLeft(w.edges.l)) {
+      } // check widget connected at left edge and is static
+      else if (w.edges.l.length && calcLeft(w.edges.l)) {
+        // w - offset
         return `${coordToPx(w.w, "w") + calcLeft(w.edges.l) * -1}px`;
       }
       return "";
@@ -175,10 +185,12 @@ const LayoutGrid = ({
           /*border:
             widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",
           */
+          // set top offset if not static
           top:
             !widget.staticHeight && widget.edges.t.length
               ? calcTop(widget.edges.t)
               : "",
+          // set left offset if not static
           left:
             !widget.staticWidth && widget.edges.l.length
               ? calcLeft(widget.edges.l)
@@ -249,7 +261,7 @@ const LayoutGrid = ({
     setbpH(getWindowBreakpoints().height);
   }, [height]);
 
-  // TODO: refurbish ***crude*** works kinda
+  // TODO: works better than expected
   function getLongestOverlappingSide(w1, w2): "t" | "r" | "b" | "l" | "none" {
     let side: "t" | "r" | "b" | "l" | "none" = "none";
 
