@@ -4,7 +4,7 @@ import GridLayout from "react-grid-layout";
 export const widgetConfig = {
   maxW: 32,
   maxH: 32,
-  minW: 5,
+  minW: 4,
   minH: 2,
   isBounded: true,
   staticWidth: undefined,
@@ -130,6 +130,7 @@ export const layoutConfig = {
   compactType: null,
   preventCollision: true,
   draggableHandle: ".widget-toolbar",
+  resizeHandles: ['se', 'sw'],
 
   toolbar: {
     height: 32,

@@ -378,6 +378,7 @@ const LayoutGrid = ({
           onResizeStop={saveLayout}
           onDragStop={saveLayout}
           draggableHandle={layoutConfig.draggableHandle}
+          resizeHandles={layoutConfig.resizeHandles}
         >
           {widgetComponents}
         </ResponsiveGrid>
