@@ -3,7 +3,7 @@ import "./layout-grid.scss";
 
 // React
 import { useEffect, useMemo, useState } from "react";
-import { useWindowSize } from "@react-hook/window-size";
+import { useWindowSize } from "@react-hook/window-size/throttled";
 
 // Layout
 import { Responsive as ResponsiveGrid, Layout } from "react-grid-layout";
@@ -32,7 +32,7 @@ const LayoutGrid = ({
   layoutConfig,
   widgetConfig,
 }: LayoutGridProps) => {
-  const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize({ leading: true });
   const [showWidgetToolbars, setShowWidgetToolbars] = useState(showToolbar);
   const [showWidgetResize, setShowWidgetResize] = useState(showToolbar);
   const [bpW, setbpW] = useState(() => getWindowBreakpoints().width);
@@ -180,12 +180,13 @@ const LayoutGrid = ({
           minHeight: calcHeight(widget),
           maxWidth: calcWidth(widget),
           minWidth: calcWidth(widget),
-          zIndex: widget.i === selectedWidget ? 9999 : 0,
+          //zIndex: widget.i === selectedWidget ? 9999 : 0,
           // TODO: re-implement, buggy after widget static height feature
           /*border:
             widget.i === selectedWidget ? "2px dotted rgba(255, 0, 0, 1)" : "",
           */
           // set top offset if not static
+
           top:
             !widget.staticHeight && widget.edges.t.length
               ? calcTop(widget.edges.t)
@@ -244,7 +245,7 @@ const LayoutGrid = ({
   // Widget positioning gets buggy when number of widgets varies
   useEffect(() => {
     if (refreshing) {
-      setTimeout(() => setRefreshing(false), 10);
+      setTimeout(() => setRefreshing(false), 150);
     }
   }, [refreshing]);
 
